@@ -1,7 +1,7 @@
 {
-  "name": "wordpress-plugin-starter",
+  "name": "postrenew",
   "version": "1.0.4",
-  "description": "A simple starter kit for building awesome WordPress plugins",
+  "description": "Auto renew your post date after interval of time you set in plugin",
   "main": "",
   "scripts": {
     "build": "node node_modules/grunt/bin/grunt build",
