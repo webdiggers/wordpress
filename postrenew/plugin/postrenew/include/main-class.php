@@ -22,14 +22,18 @@ class Postrenew {
 
     }
 
-    public static function plugin_uninstall() { }
+    public static function plugin_uninstall() {
+        delete_option( 'postrenew_settings' );
+     }
 
     /**
      * Plugin activation function
      * called when the plugin is activated
      * @method plugin_activate
      */
-    public function plugin_activate() { }
+    public function plugin_activate() {
+        delete_option('postrenew_timeframe');
+     }
 
     /**
      * Plugin deactivate function
@@ -51,16 +55,16 @@ class Postrenew {
     function plugin_admin_menu_function() {
 
         //create main top-level menu with empty content
-        add_menu_page( __('Post Renew', WPS_TEXT_DOMAIN), __('Post Renew', WPS_TEXT_DOMAIN), 'administrator', 'wps-general', null, 'dashicons-admin-generic', 4 );
+        add_menu_page( __('Post Renew', WPS_TEXT_DOMAIN), __('Post Renew', WPS_TEXT_DOMAIN), 'administrator', 'pr-general', null, 'dashicons-admin-generic', 4 );
 
         // create top level submenu page which point to main menu page
-        add_submenu_page( 'wps-general', __('General', WPS_TEXT_DOMAIN), __('General', WPS_TEXT_DOMAIN), 'manage_options', 'wps-general', array($this, 'plugin_settings_page') );
+        add_submenu_page( 'pr-general', __('General', WPS_TEXT_DOMAIN), __('General', WPS_TEXT_DOMAIN), 'manage_options', 'pr-general', array($this, 'plugin_settings_page') );
 
         // add the support page
-        add_submenu_page( 'wps-general', __('Plugin Support Page', WPS_TEXT_DOMAIN), __('Support', WPS_TEXT_DOMAIN), 'manage_options', 'wps-support', array($this, 'plugin_support_page') );
+        add_submenu_page( 'pr-general', __('Plugin Support Page', WPS_TEXT_DOMAIN), __('Support', WPS_TEXT_DOMAIN), 'manage_options', 'pr-support', array($this, 'plugin_support_page') );
 
     	//call register settings function
-    	add_action( 'admin_init', array($this, 'plugin_register_settings') );
+    	// add_action( 'admin_init', array($this, 'plugin_register_settings') );
 
     }
 
@@ -68,10 +72,10 @@ class Postrenew {
      * Register the main Plugin Settings
      * @method plugin_register_settings
      */
-    function plugin_register_settings() {
-        register_setting( 'wps-settings-group', 'example_option' );
-    	register_setting( 'wps-settings-group', 'another_example_option' );
-    }
+    // function plugin_register_settings() {
+    //     register_setting( 'wps-settings-group', 'example_option' );
+    // 	register_setting( 'wps-settings-group', 'another_example_option' );
+    // }
 
     /**
      * Enqueue the main Plugin admin scripts and styles
@@ -109,11 +113,19 @@ class Postrenew {
             if($timeframedata != '')
             {
                 update_option( 'postrenew_timeframe',array($_POST['postrenew_timeframe']));
+                $timeframedata = get_option('postrenew_timeframe');
+                echo '<div class="notice notice-success is-dismissible">
+                <p>Timeframe updated successfully.</p>
+            </div>';
             }
             else
             {
                 add_option( 'postrenew_timeframe', array($_POST['postrenew_timeframe']));
+                echo '<div class="notice notice-success is-dismissible">
+                <p>Timeframe updated successfully.</p>
+            </div>';
             }   
+            
         }
         else if(isset($_POST['runupdate']))
         {
@@ -134,8 +146,11 @@ class Postrenew {
                 $newdate = date('Y-m-d H:i:s');
                 $wpdb->query("UPDATE $wpdb->posts SET post_modified = '$newdate', post_modified_gmt = '$newdate'  WHERE ID = $post->ID" );
             }
-            
+            echo '<div class="notice notice-success is-dismissible">
+            <p>Posts Updated successfully</p>
+        </div>';
         }
+        
         ?>
     
         <div class="wrap card">
@@ -144,7 +159,7 @@ class Postrenew {
             <form method="post">
             <table class="form-table">
                 <tbody>
-                    <tr>
+                <tr>
                         <th scope="row"><?php _e( 'Time Frame', WPS_TEXT_DOMAIN ); ?></th>
                         <td>
                             <select name="postrenew_timeframe">

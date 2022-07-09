@@ -68,7 +68,7 @@ module.exports = function(grunt) {
         //     options: {
         //         i18nToolsPath: 'tools/i18n/',
         //         textdomain: '<%= pkg.name %>',
-        //         updateDomains: ['wordpress-plugin-starter']
+        //         updateDomains: ['postrenew']
         //     },
         //     target: {
         //         files: {

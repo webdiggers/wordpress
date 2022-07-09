@@ -1,7 +1,7 @@
 {
   "name": "postrenew",
-  "version": "1.0.4",
-  "description": "Auto renew your post date after interval of time you set in plugin",
+  "version": "0.0.1",
+  "description": "Plugin to renew your wordpress posts automatically",
   "main": "",
   "scripts": {
     "build": "node node_modules/grunt/bin/grunt build",
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codekraft-studio/wordpress-plugin-starter.git"
+    "url": "git+https://github.com/codekraft-studio/postrenew.git"
   },
   "author": "codekraft-studio",
   "license": "GPL-2.0+",
