@@ -49,4 +49,5 @@ function write_log ( $log )  {
 	}
 }
 
-
+- Create a new event in cron events from Tools > Cron Events
+add hook point to call (bl_cron_hook)
