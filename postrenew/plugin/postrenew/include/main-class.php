@@ -130,17 +130,8 @@ class Postrenew {
         else if(isset($_POST['runupdate']))
         {
             global $wpdb;
-            $args = array(
-                'posts_per_page' => 5,
-                'post_type' => 'post',
-                'orderby' => 'ID',
-                'order' => 'DESC',
-                'date_query' => array(
-                    'after' => date('Y-m-d', strtotime('-1 days')) 
-                )
-            ); 
-            $posts = get_posts($args);
-            //print_r($posts); die();
+            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = 'post' AND post_status = 'publish' AND post_modified <= NOW() - INTERVAL ".$_POST['postrenew_timeframe']."");
+            
             foreach($posts as $post)
             {
                 $newdate = date('Y-m-d H:i:s');
@@ -163,9 +154,10 @@ class Postrenew {
                         <th scope="row"><?php _e( 'Time Frame', WPS_TEXT_DOMAIN ); ?></th>
                         <td>
                             <select name="postrenew_timeframe">
-                                <option value="24" <?php echo ($timeframedata != '' && $timeframedata[0] == '24')?'selected':''?>>24 <?php _e( 'Hours', WPS_TEXT_DOMAIN ); ?></option>
-                                <option value="48" <?php echo ($timeframedata != '' && $timeframedata[0] == '48')?'selected':''?>>48 <?php _e( 'Hours', WPS_TEXT_DOMAIN ); ?></option>
-                                <option value="72" <?php echo ($timeframedata != '' && $timeframedata[0] == '72')?'selected':''?>>72 <?php _e( 'Hours', WPS_TEXT_DOMAIN ); ?></option>
+                                <option value="24 HOUR" <?php echo ($timeframedata != '' && $timeframedata[0] == '24 HOUR')?'selected':''?>>24 <?php _e( 'hours', WPS_TEXT_DOMAIN ); ?></option>
+                                <option value="48 HOUR" <?php echo ($timeframedata != '' && $timeframedata[0] == '48 HOUR')?'selected':''?>>48 <?php _e( 'hours', WPS_TEXT_DOMAIN ); ?></option>
+                                <option value="72 HOUR" <?php echo ($timeframedata != '' && $timeframedata[0] == '72 HOUR')?'selected':''?>>72 <?php _e( 'hours', WPS_TEXT_DOMAIN ); ?></option>
+                                <option value="7 DAY" <?php echo ($timeframedata != '' && $timeframedata[0] == '7 DAY')?'selected':''?>>7 <?php _e( 'days', WPS_TEXT_DOMAIN ); ?></option>
                                 
                             </select>
                             <p class="description"><?php _e( 'Set Time to update post date after interval of time.', WPS_TEXT_DOMAIN ); ?></p>

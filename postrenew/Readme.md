@@ -11,6 +11,11 @@ add_action( 'wp_enqueue_scripts', 'twentytwentytwo_styles' );
 // Add block patterns
 require get_template_directory() . '/inc/block-patterns.php';
 
+add_action( 'wp_enqueue_scripts', 'twentytwentytwo_styles' );
+
+// Add block patterns
+require get_template_directory() . '/inc/block-patterns.php';
+
 add_filter( 'cron_schedules', 'example_add_cron_interval' );
 function example_add_cron_interval( $schedules ) { 
     $schedules['five_minutes'] = array(
@@ -30,23 +35,15 @@ function bl_cron_exec(){
 }
 
 function write_log ( $log )  {
+	$timeframe = get_option('postrenew_timeframe');
 	global $wpdb;
-	$args = array(
-		'posts_per_page' => 5,
-		'post_type' => 'post',
-		'orderby' => 'ID',
-		'order' => 'DESC',
-		'date_query' => array(
-			'after' => date('Y-m-d', strtotime('-1 days')) 
-		)
-	); 
-	$posts = get_posts($args);
-	//print_r($posts); die();
-	foreach($posts as $post)
-	{
-		$newdate = date('Y-m-d H:i:s');
-		$wpdb->query("UPDATE $wpdb->posts SET post_modified = '$newdate', post_modified_gmt = '$newdate'  WHERE ID = $post->ID" );
-	}
+            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = 'post' AND post_status = 'publish' AND post_modified <= NOW() - INTERVAL ".$timeframe[0]."");
+            
+            foreach($posts as $post)
+            {
+                $newdate = date('Y-m-d H:i:s');
+                $wpdb->query("UPDATE $wpdb->posts SET post_modified = '$newdate', post_modified_gmt = '$newdate'  WHERE ID = $post->ID" );
+            }
 }
 
 - Create a new event in cron events from Tools > Cron Events
