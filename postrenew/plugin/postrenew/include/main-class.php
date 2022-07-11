@@ -158,6 +158,9 @@ class Postrenew {
                                 <option value="48 HOUR" <?php echo ($timeframedata != '' && $timeframedata[0] == '48 HOUR')?'selected':''?>>48 <?php _e( 'hours', WPS_TEXT_DOMAIN ); ?></option>
                                 <option value="72 HOUR" <?php echo ($timeframedata != '' && $timeframedata[0] == '72 HOUR')?'selected':''?>>72 <?php _e( 'hours', WPS_TEXT_DOMAIN ); ?></option>
                                 <option value="7 DAY" <?php echo ($timeframedata != '' && $timeframedata[0] == '7 DAY')?'selected':''?>>7 <?php _e( 'days', WPS_TEXT_DOMAIN ); ?></option>
+                                <option value="14 DAY" <?php echo ($timeframedata != '' && $timeframedata[0] == '14 DAY')?'selected':''?>>14 <?php _e( 'days', WPS_TEXT_DOMAIN ); ?></option>
+                                <option value="30 DAY" <?php echo ($timeframedata != '' && $timeframedata[0] == '30 DAY')?'selected':''?>>30 <?php _e( 'days', WPS_TEXT_DOMAIN ); ?></option>
+                                <option value="45 DAY" <?php echo ($timeframedata != '' && $timeframedata[0] == '45 DAY')?'selected':''?>>45 <?php _e( 'days', WPS_TEXT_DOMAIN ); ?></option>
                                 
                             </select>
                             <p class="description"><?php _e( 'Set Time to update post date after interval of time.', WPS_TEXT_DOMAIN ); ?></p>
