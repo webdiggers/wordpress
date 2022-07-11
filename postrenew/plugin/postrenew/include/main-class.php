@@ -130,12 +130,12 @@ class Postrenew {
         else if(isset($_POST['runupdate']))
         {
             global $wpdb;
-            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = 'post' AND post_status = 'publish' AND post_modified <= NOW() - INTERVAL ".$_POST['postrenew_timeframe']."");
-            
+            $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = 'post' AND post_status = 'publish' AND post_date <= NOW() - INTERVAL ".$_POST['postrenew_timeframe']."");
+            //echo '<pre>'; print_R($posts); die();
             foreach($posts as $post)
             {
                 $newdate = date('Y-m-d H:i:s');
-                $wpdb->query("UPDATE $wpdb->posts SET post_modified = '$newdate', post_modified_gmt = '$newdate'  WHERE ID = $post->ID" );
+                $wpdb->query("UPDATE $wpdb->posts SET post_modified = '$newdate', post_modified_gmt = '$newdate', post_date = '$newdate', post_date_gmt = '$newdate' WHERE ID = $post->ID" );
             }
             echo '<div class="notice notice-success is-dismissible">
             <p>Posts Updated successfully</p>
