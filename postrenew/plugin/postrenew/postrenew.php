@@ -5,7 +5,7 @@
  *
  * @package     Post Renew
  * @author      webdiggers
- * @copyright   
+ * @copyright
  * @license     GPL-2.0+
  *
  * @postnrew
@@ -34,3 +34,33 @@ define( "WPS_DIRECTORY_URL", plugins_url( null, WPS_FILE ) );
 
 // Require the main class file
 require_once( WPS_DIRECTORY . '/include/main-class.php' );
+add_filter( 'cron_schedules', 'every_five_minutes' );
+function every_five_minutes( $schedules ) {
+    $schedules['five_minutes'] = array(
+        'interval' => 300,
+        'display'  => esc_html__( 'Every Five Minutes' ), );
+    return $schedules;
+}
+
+if ( !wp_next_scheduled( 'bl_cron_hook' ) ) {
+
+    wp_schedule_event( time(), 'five_minutes', 'bl_cron_hook' );
+}
+
+
+add_action( 'bl_cron_hook', 'bl_cron_exec' );
+function bl_cron_exec(){
+    write_log();
+}
+
+function write_log ()  {
+    $timeframe = get_option('postrenew_timeframe');
+    global $wpdb;
+    $posts = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_type = 'post' AND post_status = 'publish' AND post_date <= NOW() - INTERVAL ".$timeframe[0]."");
+
+    foreach($posts as $post)
+    {
+        $newdate = date('Y-m-d H:i:s');
+        $wpdb->query("UPDATE $wpdb->posts SET post_modified = '$newdate', post_modified_gmt = '$newdate', post_date = '$newdate', post_date_gmt = '$newdate' WHERE ID = $post->ID" );
+    }
+}
